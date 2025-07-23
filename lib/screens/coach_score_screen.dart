@@ -281,7 +281,7 @@ class CoachScoreScreen extends StatelessWidget {
             ),
             SizedBox(height: 12),
 
-            // Name of Work
+           
             Obx(
               () => TextFormField(
                 initialValue: controller.nameOfWork.value,
@@ -352,41 +352,131 @@ class CoachScoreScreen extends StatelessWidget {
                   ),
                   prefixIcon: Icon(Icons.train),
                 ),
+                keyboardType: TextInputType.number,
                 onChanged: (value) => controller.trainNo.value = value,
               ),
             ),
             SizedBox(height: 12),
 
             Obx(
-              () => TextFormField(
-                initialValue: controller.arrivalTime.value,
-                decoration: InputDecoration(
-                  labelText: 'Arrival Time',
-                  border: OutlineInputBorder(
+              () => GestureDetector(
+                onTap: () async {
+                  TimeOfDay initialTime = TimeOfDay.now();
+
+                  if (controller.arrivalTime.value.isNotEmpty) {
+                    try {
+                      final parts = controller.arrivalTime.value
+                          .split(' ')[0]
+                          .split(':');
+                      initialTime = TimeOfDay(
+                        hour: int.parse(parts[0]),
+                        minute: int.parse(parts[1]),
+                      );
+                    } catch (e) {
+                      print('Error parsing arrival time: $e');
+                    }
+                  }
+
+                  final TimeOfDay? picked = await showTimePicker(
+                    context: Get.context!,
+                    initialTime: initialTime,
+                  );
+
+                  if (picked != null) {
+                    final String formattedTime = _formatTimeWithAMPM(picked);
+                    controller.arrivalTime.value = formattedTime;
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  prefixIcon: Icon(Icons.schedule),
-                  hintText: 'HH:MM (e.g., 14:30)',
+                  child: Row(
+                    children: [
+                      Icon(Icons.schedule, color: Colors.grey[600]),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          controller.arrivalTime.value.isEmpty
+                              ? 'Select Arrival Time'
+                              : controller.arrivalTime.value,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: controller.arrivalTime.value.isEmpty
+                                ? Colors.grey[600]
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey[600]),
+                    ],
+                  ),
                 ),
-                onChanged: (value) => controller.arrivalTime.value = value,
               ),
             ),
             SizedBox(height: 12),
 
             Obx(
-              () => TextFormField(
-                initialValue: controller.departureTime.value,
-                decoration: InputDecoration(
-                  labelText: 'Departure Time',
-                  border: OutlineInputBorder(
+              () => GestureDetector(
+                onTap: () async {
+                  TimeOfDay initialTime = TimeOfDay.now();
+
+                  if (controller.departureTime.value.isNotEmpty) {
+                    try {
+                      final parts = controller.departureTime.value
+                          .split(' ')[0]
+                          .split(':');
+                      initialTime = TimeOfDay(
+                        hour: int.parse(parts[0]),
+                        minute: int.parse(parts[1]),
+                      );
+                    } catch (e) {
+                      print('Error parsing departure time: $e');
+                    }
+                  }
+
+                  final TimeOfDay? picked = await showTimePicker(
+                    context: Get.context!,
+                    initialTime: initialTime,
+                  );
+
+                  if (picked != null) {
+                    final String formattedTime = _formatTimeWithAMPM(picked);
+                    controller.departureTime.value = formattedTime;
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  prefixIcon: Icon(Icons.schedule),
-                  hintText: 'HH:MM (e.g., 15:45)',
+                  child: Row(
+                    children: [
+                      Icon(Icons.schedule, color: Colors.grey[600]),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          controller.departureTime.value.isEmpty
+                              ? 'Select Departure Time'
+                              : controller.departureTime.value,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: controller.departureTime.value.isEmpty
+                                ? Colors.grey[600]
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey[600]),
+                    ],
+                  ),
                 ),
-                onChanged: (value) => controller.departureTime.value = value,
               ),
             ),
+
             SizedBox(height: 12),
 
             Obx(
@@ -423,6 +513,18 @@ class CoachScoreScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatTimeWithAMPM(TimeOfDay time) {
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      time.hour,
+      time.minute,
+    );
+    return DateFormat('h:mm a').format(dateTime);
   }
 
   Widget _buildCoachActivitiesSection() {

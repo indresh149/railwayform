@@ -1,8 +1,0 @@
-# Ignore everything except necessary files
-*
-!web/
-!lib/
-!pubspec.yaml
-!pubspec.lock
-!analysis_options.yaml
-!build/web/
