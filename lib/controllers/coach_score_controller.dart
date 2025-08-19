@@ -9,7 +9,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CoachScoreController extends GetxController {
-  final formKey1 = GlobalKey<FormState>();
   
   final workOrderNo = ''.obs;
   final inspectionDate = ''.obs;
@@ -22,7 +21,6 @@ class CoachScoreController extends GetxController {
   final departureTime = ''.obs;
   final coachesAttended = ''.obs;
   final totalCoaches = ''.obs;
-  var isTableView = false.obs;
   
   final RxMap<String, Map<String, int>> coachScores = <String, Map<String, int>>{}.obs;
   
