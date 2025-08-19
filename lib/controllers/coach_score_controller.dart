@@ -73,16 +73,6 @@ class CoachScoreController extends GetxController {
     return coachScores[coach]?[activity] ?? 0;
   }
   
-  int getTotalScoreForCoach(String coach) {
-    int total = 0;
-    if (coachScores[coach] != null) {
-      coachScores[coach]!.forEach((activity, score) {
-        total += score;
-      });
-    }
-    return total;
-  }
-  
   int get totalScore {
     int total = 0;
     coachScores.forEach((coach, activities) {
@@ -94,7 +84,7 @@ class CoachScoreController extends GetxController {
   }
   
   int get maxScore {
-    return coaches.length * activities.length * 1;
+    return coaches.length * activities.length * 9;
   }
   
   double get scorePercentage => maxScore > 0 ? (totalScore / maxScore) * 100 : 0;
@@ -109,8 +99,6 @@ class CoachScoreController extends GetxController {
     return count;
   }
 
-  
-  
   void _checkConnectivity() async {
     final connectivity = Connectivity();
     final result = await connectivity.checkConnectivity();
@@ -484,29 +472,5 @@ class CoachScoreController extends GetxController {
     totalCoaches.value = '';
     
     _initializeScores();
-  }
-  
-  String getActivityDisplayName(String activity) {
-    switch (activity) {
-      case 'T1':
-      case 'T2':
-      case 'T3':
-      case 'T4':
-        return 'Toilet $activity cleaning complete';
-      case 'cleaning_wiping':
-        return 'Cleaning & wiping of outside washbasin';
-      case 'B1':
-        return 'Vestibule area B1';
-      case 'B2':
-        return 'Vestibule area B2';
-      case 'D1':
-        return 'Doorway area D1';
-      case 'D2':
-        return 'Doorway area D2';
-      case 'disposal_waste':
-        return 'Disposal of collected waste';
-      default:
-        return activity;
-    }
   }
 }
